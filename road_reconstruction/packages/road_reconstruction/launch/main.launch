@@ -1,0 +1,4 @@
+<launch>
+    <node name="republish" type="republish" pkg="image_transport" output="screen" 
+    args="compressed in:=/csc22906/camera_node/image raw out:=/camera/image_raw" />
+</launch>
