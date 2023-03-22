@@ -1,0 +1,17 @@
+services:
+ orb_slam2:
+   build:
+     context: ORB_SLAM2
+   # https://stackoverflow.com/a/69505647
+   environment:
+     DISPLAY: $DISPLAY
+   volumes:
+     - /tmp/.X11-unix:/tmp/.X11-unix
+     - ~/.Xauthority:/root/.Xauthority
+   network_mode: "host"
+ road_reconstruction:
+   build:
+     context: road_reconstruction
+   volumes:
+     - /data:/data
+   network_mode: "host"
