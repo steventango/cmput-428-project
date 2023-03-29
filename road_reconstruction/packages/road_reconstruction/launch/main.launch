@@ -1,4 +1,13 @@
 <launch>
     <node name="republish" type="republish" pkg="image_transport" output="screen" 
-    args="compressed in:=/csc22906/camera_node/image raw out:=/camera/image_raw" />
+    args="compressed in:=/csc22902/camera_node/image raw out:=/camera/image_raw" />
+    <arg name="veh"/>
+    <group ns="$(arg veh)">
+      <node pkg="road_reconstruction"
+          type="road_reconstruction_node.py"
+          name="road_reconstruction"
+          output="screen">
+        <param name="veh" value="$(arg veh)"/>
+      </node>
+    </group>
 </launch>
