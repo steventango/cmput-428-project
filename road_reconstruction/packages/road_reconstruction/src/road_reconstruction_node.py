@@ -17,6 +17,7 @@ class RoadReconstructionNode(DTROS):
         self.hostname = rospy.get_param("~veh")
         self.bridge = CvBridge()
         self.compressed = None
+        self.camera_info = None
 
         self.compressed_sub = rospy.Subscriber(
             f"/{self.hostname}/camera_node/image/compressed",
@@ -32,18 +33,20 @@ class RoadReconstructionNode(DTROS):
             queue_size=1,
         )
 
-    def cb_compressed(self, compressed):
+    def cb_compressed(self, compressed: CompressedImage):
         self.compressed = compressed
 
-    def cb_camera_info(self, message):
+    def cb_camera_info(self, message: CameraInfo):
         rospy.loginfo(message)
+        self.camera_info = message
         self.camera_info_sub.unregister()
 
     def run(self, rate=1):
-        return
         rate = rospy.Rate(rate)
 
         while not rospy.is_shutdown():
+            if self.compressed is not None:
+                break
             rate.sleep()
 
     def onShutdown(self):
