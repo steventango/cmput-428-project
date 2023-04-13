@@ -8,6 +8,7 @@ services:
    volumes:
      - /tmp/.X11-unix:/tmp/.X11-unix
      - ~/.Xauthority:/root/.Xauthority
+     - /data:/data
    network_mode: "host"
  road_reconstruction:
    build:

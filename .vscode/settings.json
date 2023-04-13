@@ -1,3 +1,17 @@
 {
-  "ros.distro": "noetic"
+  "ros.distro": "noetic",
+  "files.associations": {
+    "*.mdx": "markdown",
+    "condition_variable": "cpp",
+    "iostream": "cpp",
+    "ostream": "cpp",
+    "*.tcc": "cpp",
+    "deque": "cpp",
+    "list": "cpp",
+    "string": "cpp",
+    "vector": "cpp",
+    "*.ipp": "cpp",
+    "array": "cpp",
+    "string_view": "cpp"
+  }
 }
