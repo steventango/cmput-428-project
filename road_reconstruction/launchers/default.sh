@@ -15,7 +15,7 @@ dt-launchfile-init
 # launching app
 roscore&
 sleep 1
-rosbag play /bags/motion.bag --loop&
+rosbag play /bags/motion.bag --loop --quiet &
 dt-exec roslaunch road_reconstruction main.launch veh:="csc22902"
 # ----------------------------------------------------------------------------
 # YOUR CODE ABOVE THIS LINE

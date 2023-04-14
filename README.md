@@ -7,10 +7,14 @@ See [road_reconstruction/packages/road_reconstruction/src/](road_reconstruction/
 for the main technical contribution of this project.
 
 
-Need to install:
-`docker`
+## Requirements
+- Docker
+- Docker Compose
+- X11 Forwarding
+- Ubuntu 20.04
 
-Tested on Ubuntu 20.04
-
-`xhost +`
-`docker compose up`
+## Usage
+```bash
+xhost +
+docker compose up
+```

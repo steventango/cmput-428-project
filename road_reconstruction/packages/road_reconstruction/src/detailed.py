@@ -1,12 +1,11 @@
 """
+Modified from https://raw.githubusercontent.com/opencv/opencv/4.x/samples/python/stitching_detailed.py
+===========================
 Stitching sample (advanced)
 ===========================
 
 Show how to use Stitcher API from python.
 """
-
-# Python 2/3 compatibility
-from __future__ import print_function
 
 import argparse
 from collections import OrderedDict
@@ -88,10 +87,6 @@ BLEND_CHOICES = ('multiband', 'feather', 'no',)
 
 parser = argparse.ArgumentParser(
     prog="stitching_detailed.py", description="Rotation model images stitcher"
-)
-parser.add_argument(
-    'img_names', nargs='+',
-    help="Files to stitch", type=str
 )
 parser.add_argument(
     '--try_cuda',
@@ -273,10 +268,8 @@ def get_compensator(args):
     return compensator
 
 
-def main():
+def main(args, full_imgs):
     args = parser.parse_args()
-    img_names = args.img_names
-    print(img_names)
     work_megapix = args.work_megapix
     seam_megapix = args.seam_megapix
     compose_megapix = args.compose_megapix
@@ -310,11 +303,7 @@ def main():
     is_work_scale_set = False
     is_seam_scale_set = False
     is_compose_scale_set = False
-    for name in img_names:
-        full_img = cv.imread(cv.samples.findFile(name))
-        if full_img is None:
-            print("Cannot read image ", name)
-            exit()
+    for full_img in full_imgs:
         full_img_sizes.append((full_img.shape[1], full_img.shape[0]))
         if work_megapix < 0:
             img = full_img
@@ -442,8 +431,7 @@ def main():
     blender = None
     timelapser = None
     # https://github.com/opencv/opencv/blob/4.x/samples/cpp/stitching_detailed.cpp#L725 ?
-    for idx, name in enumerate(img_names):
-        full_img = cv.imread(name)
+    for full_img in enumerate(full_imgs):
         if not is_compose_scale_set:
             if compose_megapix > 0:
                 compose_scale = min(1.0, np.sqrt(compose_megapix * 1e6 / (full_img.shape[0] * full_img.shape[1])))
@@ -511,8 +499,7 @@ def main():
         zoom_x = 600.0 / result.shape[1]
         dst = cv.normalize(src=result, dst=None, alpha=255., norm_type=cv.NORM_MINMAX, dtype=cv.CV_8U)
         dst = cv.resize(dst, dsize=None, fx=zoom_x, fy=zoom_x)
-        cv.imshow(result_name, dst)
-        cv.waitKey()
+        return result_name
 
     print("Done")
 
