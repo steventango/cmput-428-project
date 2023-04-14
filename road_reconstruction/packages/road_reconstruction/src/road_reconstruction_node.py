@@ -5,7 +5,7 @@ import rospy
 from cv_bridge import CvBridge
 from duckietown.dtros import DTROS, NodeType
 from sensor_msgs.msg import CompressedImage, CameraInfo
-from std_msgs.msg import Int8MultiArray, Float32MultiArray
+from std_msgs.msg import UInt8MultiArray, Float32MultiArray
 from geometry_msgs.msg import Vector3
 from rospy.numpy_msg import numpy_msg
 
@@ -32,7 +32,7 @@ class RoadReconstructionNode(DTROS):
 
         self.keyframes_sub = rospy.Subscriber(
             "/orb_slam2/keyframes",
-            numpy_msg(Int8MultiArray),
+            numpy_msg(UInt8MultiArray),
             self.cb_keyframes,
             queue_size=1,
         )
@@ -56,21 +56,24 @@ class RoadReconstructionNode(DTROS):
         self.camera_info = message
         self.camera_info_sub.unregister()
 
-    def cb_keyframes(self, message: Int8MultiArray):
-        self.keyframes: np.ndarray = message.data
-        self.keyframes = self.keyframes.reshape(
+    def cb_keyframes(self, message: UInt8MultiArray):
+        rospy.loginfo("keyframe_cb")
+        keyframes: np.ndarray = np.frombuffer(message.data, dtype=np.uint8)
+        self.keyframes = keyframes.reshape(
             [dim.size for dim in message.layout.dim]
         )
 
     def cb_keypoints(self, message: Float32MultiArray):
-        self.keypoints: np.ndarray = message.data
-        self.keypoints = self.keypoints.reshape(
+        rospy.loginfo("keypoints_cb")
+        keypoints: np.ndarray = message.data
+        self.keypoints = keypoints.reshape(
             [dim.size for dim in message.layout.dim]
         )
 
     def cb_mappoints(self, message: Float32MultiArray):
-        self.mappoints: np.ndarray = message.data
-        self.mappoints = self.mappoints.reshape(
+        rospy.loginfo("mappoints_cb")
+        mappoints: np.ndarray = message.data
+        self.mappoints = mappoints.reshape(
             [dim.size for dim in message.layout.dim]
         )
 
@@ -78,12 +81,9 @@ class RoadReconstructionNode(DTROS):
         rospy.loginfo("road_reconstruction")
         rospy.loginfo(self.keyframes.shape)
         rospy.loginfo(self.keyframes.dtype)
-        for i in range(self.keyframes.shape[0]):
-            image = self.keyframes[i, :, :, :]
-            if image.sum() > 0:
-                cv.imshow(f"keyframe", image)
-            else:
-                print(f"empty image {i}")
+        image = self.keyframes[2, :, :, :]
+        cv.imshow("image", image)
+        cv.waitKey(0)
 
     def run(self, rate=1):
         rate = rospy.Rate(rate)
