@@ -1,10 +1,10 @@
 # CMPUT 428 Project
 
-In this project we aim to reconstruct a road from a set of images taken from a
-Duckiebot by combining SLAM and Brown paper.
+In this project we aim to perform road surface reconstruction and motion extrapolation.
 
-See [road_reconstruction/packages/road_reconstruction/src/](road_reconstruction/packages/road_reconstruction/src/)
-for the main technical contribution of this project.
+See [2D_approach.ipynb] for code supporting the 2D approach.
+
+See [road_reconstruction/packages/road_reconstruction/src/](road_reconstruction/packages/road_reconstruction/src/) for code supporting the 3D approach.
 
 
 ## Requirements
