@@ -200,8 +200,6 @@ class RoadReconstructionNode(DTROS):
         sigma = 2.5
         mappoints_inliers_2d = mappoints_inliers_2d[np.linalg.norm(mappoints_inliers_2d - centroid, axis=1) < sigma * std.max()]
 
-        warped_keyframes = []
-        warped_keyframes_cropped = []
         h, w = 1024, 1024
         s = np.array([w / np.max(mappoints_inliers_2d[:, 0]), h / np.max(mappoints_inliers_2d[:, 1])])
         canvas = np.full((h, w, 3), 255, dtype=np.uint8)
@@ -234,7 +232,6 @@ class RoadReconstructionNode(DTROS):
             warped_keyframe = cv.cvtColor(warped_keyframe, cv.COLOR_BGR2RGB)
 
             warped_keyframe[mask == 0] = 0
-            cv.imwrite(f"hull/{j}.png", warped_keyframe)
             warped_keyframe = cv.warpPerspective(warped_keyframe, H, (w, h), cv.INTER_LINEAR)
 
             slicer = (canvas == 1) & (warped_keyframe != 0)
@@ -242,20 +239,7 @@ class RoadReconstructionNode(DTROS):
             alpha = 0.5
             canvas[warped_keyframe != 0] = (1 - alpha) * canvas[warped_keyframe != 0] + alpha * warped_keyframe[warped_keyframe != 0]
 
-            warped_keyframes.append(warped_keyframe)
             warped_keyframe = cv.cvtColor(warped_keyframe, cv.COLOR_RGB2BGR)
-            cv.imwrite(f"masked/{j}.png", warped_keyframe)
-
-            warped_keyframe_cropped = warped_keyframe.copy()
-            contours, _ = cv.findContours(warped_mask, cv.RETR_EXTERNAL, cv.CHAIN_APPROX_SIMPLE)
-            if len(contours) == 0:
-                continue
-            x, y, w_, h_ = cv.boundingRect(contours[0])
-            warped_keyframe_cropped = warped_keyframe_cropped[y:y+h_, x:x+w_]
-
-            if warped_keyframe_cropped.shape[0] > 0 and warped_keyframe_cropped.shape[1] > 0:
-                warped_keyframes_cropped.append(warped_keyframe_cropped)
-                cv.imwrite(f"cropped/{j}.png", warped_keyframe_cropped)
 
         canvas = cv.cvtColor(canvas, cv.COLOR_RGB2BGR)
         cv.imshow("canvas", canvas)
