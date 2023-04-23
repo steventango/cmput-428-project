@@ -7,6 +7,8 @@ import lk
 from time import time
 from scipy.stats import linregress
 
+# generates output2.avi, or individual frames (currently)
+
 def d(c):
   # optimize sum of squares of distances to mean circle
   r = np.sqrt((x-c[0])**2+(y-c[1])**2)
@@ -23,7 +25,7 @@ def g(c):
   # constraint
   return np.mean(np.sqrt((x-c[0])**2+(y-c[1])**2)) - np.sqrt((x[-1]-c[0])**2+(y[-1]-c[1])**2)
 
-w = np.ones(4)
+w = np.ones(4)                      # weights (earliest to latest)
 points = []
 imgs = []
 x, y = np.zeros(0), np.zeros(0)     # tracked points
@@ -38,7 +40,8 @@ def record(event,x,y,flags,param):
         cv2.circle(frame,(x,y), 4, (255,255,255), 2)
         cv2.imshow("test", frame)
 
-cam = cv2.VideoCapture('testvid1.mp4')
+
+cam = cv2.VideoCapture('testvid1.mp4')    # video file used
 cv2.namedWindow("test")
 
 ret, frame = cam.read()
