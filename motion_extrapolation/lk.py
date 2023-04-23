@@ -5,7 +5,7 @@ import numpy as np
 import math
 import time
 
-# modified for l2.1.2
+# modified for labs and project
 
 def readTrackingData(filename):
     if not os.path.isfile(filename):

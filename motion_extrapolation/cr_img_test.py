@@ -6,6 +6,8 @@ import cv2
 import lk
 from time import time
 
+# program for testing curve fitting on real images. can safely ignore
+
 def d(c):
   # optimize sum of squares of distances to mean circle
   r = np.sqrt((x-c[0])**2+(y-c[1])**2)
