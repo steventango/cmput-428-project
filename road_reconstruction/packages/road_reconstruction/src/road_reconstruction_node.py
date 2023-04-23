@@ -205,7 +205,7 @@ class RoadReconstructionNode(DTROS):
         canvas = np.full((h, w, 3), 255, dtype=np.uint8)
         areas = []
         for j, (keyframe, keypoint) in enumerate(zip(self.keyframes, self.keypoints)):
-            keypoint_inliers, corresponding_inlier_mappoints = get_correspondences(keypoint, mappoints_inlier_indice, self.mappoints)
+            keypoint_inliers, corresponding_inlier_mappoints = get_correspondences(keypoint, mappoints_inlier_indices, self.mappoints)
             corresponding_inlier_mappoints_2d = project_points(model, corresponding_inlier_mappoints, vh, Rz)
             corresponding_inlier_mappoints_2d += offset
             centroid_filter = np.linalg.norm(
